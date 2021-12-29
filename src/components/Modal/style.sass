@@ -1,0 +1,49 @@
+.overlay
+    z-index: 3000
+    width: 100vw
+    overflow: hidden
+    cursor: pointer
+
+.modal
+    position: fixed
+    left: 0
+    top: 8.45%
+    right: 0
+    bottom: 0
+    display: flex
+    align-items: center
+    justify-content: center
+    background-color: rgba(0, 0, 0, 0.5)
+    z-index: 1000
+    overflow: hidden
+
+    .enter-done
+        opacity: 1
+        pointer-events: visible
+
+    .exit
+        opacity: 0
+
+    &-content
+        position: absolute
+        top: 0
+        right: 13%
+        width: 325px
+        height: 550px
+        background-color: #fff
+
+    &-header,
+
+    &-footer
+        padding: 10px
+        pointer-events: visible
+        button:hover
+            cursor: pointer
+
+    &-title
+        margin: 0
+
+    &-body
+        padding: 10px
+        border-top: 1px solid #eee
+        border-bottom: 1px solid #eee
