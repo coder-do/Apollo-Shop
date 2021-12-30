@@ -2,7 +2,7 @@
     display: flex
     justify-content: space-between
     align-items: center
-    max-width: 100%
+    width: 100%
     height: 80px
 
     .logo
@@ -22,9 +22,11 @@
             color: #5ECE7B
             box-shadow: inset 0 -2px 0 0 #5ECE7B
 
-        div
+        div:not(:first-child)
             margin: 0 30px
-            height: auto
+
+        div:first-child
+            margin-right: 30px
         a
             text-decoration: none
             padding-bottom: 30px
