@@ -10,6 +10,10 @@ export default class CurrencyBlock extends Component {
         }
     }
 
+    shouldComponentUpdate(_, nextState) {
+        return nextState.selectedValue !== this.state.selectedValue
+    }
+
     render() {
         const { selectedValue } = this.state;
         console.log(selectedValue);

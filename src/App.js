@@ -33,9 +33,7 @@ export default class App extends Component {
                 <div className='container'>
                     <Header show={this.show} />
                     <div className='wrapper'>
-                        <Modal title="My Modal" onClose={this.close} show={this.state.show}>
-                            <p>This is modal body</p>
-                        </Modal>
+                        <Modal onClose={this.close} show={this.state.show} />
                     </div>
                     <Routes>
                         <Route path="/" element={<HomePage />} />

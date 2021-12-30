@@ -60,13 +60,16 @@ export default class CartElement extends Component {
     }
 
     render() {
-        const { sizes, currentSize, currentImageIndex, currentImage, images,
-            qtty } = this.state;
+        const {
+            sizes, currentSize, currentImageIndex,
+            currentImage, images, qtty
+        } = this.state;
+        const { small } = this.props;
 
         return (
             <>
-                <hr className='line' />
-                <div className='cart'>
+                {!small && <hr className='line' />}
+                <div className={`cart ${small && 'small'}`}>
                     <div className='cart__block1'>
                         <h3 className='cart__header'>Apollo</h3>
                         <p className='cart__subheader'>Running Short</p>
