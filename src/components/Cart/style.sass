@@ -1,0 +1,130 @@
+.cart-header
+    margin-top: 80px
+    margin-bottom: 59px
+    font-style: normal
+    font-weight: bold
+    font-size: 32px
+    line-height: 40px
+    text-transform: uppercase
+    color: #1D1F22
+
+.line
+    margin: 0
+    padding: 0
+    opacity: 0.5
+
+.cart
+    display: flex
+    justify-content: space-between
+    align-items: center
+    margin-bottom: 20px
+
+    .sizes__wrapper
+        display: flex,
+        justify-content: space-between,
+        max-width: 300px
+
+        div:not(:last-child)
+            margin-right: 12px
+
+    &__header
+        font-style: normal
+        font-weight: 600
+        font-size: 30px
+        line-height: 27px
+        color: #1D1F22
+
+    &__subheader
+        font-style: normal
+        font-weight: normal
+        font-size: 30px
+        line-height: 27px
+        color: #1D1F22
+
+    &__price
+        font-style: normal
+        font-weight: bold
+        font-size: 24px
+        line-height: 18px
+        color: #1D1F22
+        margin-bottom: 35px
+
+    .product__size
+        width: 63px
+        height: 45px
+        border: 1px solid #1D1F22
+        box-sizing: border-box
+        text-align: center
+        padding-top: 13px
+        &:hover
+            cursor: pointer
+
+    .size
+        background-color: #000
+        color: #fff
+
+    &__block2
+        display: flex
+        align-items: center
+
+        .item__image
+            max-width: 141px
+            max-height: 185px
+
+        .images
+            position: relative
+
+            .arrow
+                max-width: 24px
+                max-height: 24px
+
+            .left
+                position: absolute
+                left: 0
+                top: 45%
+
+                &:hover
+                    cursor: pointer
+
+            .right
+                position: absolute
+                right: 0
+                top: 45%
+
+                &:hover
+                    cursor: pointer
+
+    .counter
+        max-width: 45px
+        margin-right: 12px
+        user-select: none
+
+        .disabled
+            opacity: 0.3
+
+        &__number
+            font-style: normal
+            font-weight: 500
+            font-size: 24px
+            line-height: 160%
+            text-align: center
+            color: #1D1F22
+
+        &__item
+            display: flex
+            align-items: center
+            justify-content: center
+            text-align: center
+            padding: 0
+            height: 45px
+            width: 45px
+            font-size: 40px
+
+            &:last-child
+                padding-bottom: 5px
+
+            &:hover
+                background-color: #e0e0e0
+
+            &:active
+                background-color: #f3f0f0

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import CartElement from './CartElement';
 
 export default class Cart extends Component {
     constructor(props) {
@@ -9,8 +8,8 @@ export default class Cart extends Component {
     render() {
         return (
             <>
-                <h1>Cart</h1>
-                <CartElement />
+                <h1 className='cart-header'>Cart</h1>
+                {this.props.children}
             </>
         )
     }
