@@ -8,12 +8,13 @@ export default class Header extends Component {
     constructor(props) {
         super(props);
     }
+
     render() {
         return (
             <div className='header'>
                 <Nav />
                 <Logo />
-                <CurrencyBlock show={this.props.show} />
+                <CurrencyBlock show={this.props.show} items={this.props.items} />
             </div>
         )
     }

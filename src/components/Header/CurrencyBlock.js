@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import image from '../../assets/cart.svg';
 
 export default class CurrencyBlock extends Component {
@@ -10,12 +9,15 @@ export default class CurrencyBlock extends Component {
         }
     }
 
-    shouldComponentUpdate(_, nextState) {
+    shouldComponentUpdate(props, nextState) {
         return nextState.selectedValue !== this.state.selectedValue
+            || props.items !== this.props.items;
     }
+
 
     render() {
         const { selectedValue } = this.state;
+        const { items } = this.props;
         console.log(selectedValue);
         return (
             <div className='currency'>
@@ -43,14 +45,12 @@ export default class CurrencyBlock extends Component {
                 <div onClick={this.props.show} style={{
                     cursor: 'pointer'
                 }}>
-                    {/* <Link to='cart'> */}
-                    <span className='number'>{2}</span>
+                    <span className='number'>{items}</span>
                     <img
 
                         src={image}
                         alt='cart'
                     />
-                    {/* </Link> */}
                 </div>
             </div>
         )

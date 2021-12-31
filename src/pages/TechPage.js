@@ -1,8 +1,25 @@
 import React, { Component } from 'react';
 import Card from '../components/Card';
+import { getData } from '../apollo/getData';
 
 export default class TechPage extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            products: []
+        }
+    }
+
+    async componentDidMount() {
+        const data = (await getData()).tech;
+        this.setState(prev => ({
+            ...prev,
+            products: data
+        }))
+    }
+
     render() {
+        const { products } = this.state;
         return (
             <div className='container'>
                 <h1 style={{
@@ -15,13 +32,17 @@ export default class TechPage extends Component {
                 <div style={{
                     display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between',
                 }}>
-                    <Card isOutOfStock />
-                    <Card />
-                    <Card />
-                    <Card />
-                    <Card />
-                    <Card />
-                    <Card />
+                    {products.length > 0 && products.map((product, i) => (
+                        <Card
+                            key={i}
+                            id={product.id}
+                            title={product.name}
+                            mainImage={product.gallery[0]}
+                            price={product.prices[0].amount}
+                            currency={product.prices[0].currency.symbol}
+                            isOutOfStock={!product.inStock}
+                        />
+                    ))}
                 </div>
             </div>
         )

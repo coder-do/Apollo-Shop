@@ -5,33 +5,38 @@ export default class ProductDetail extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            images: [
-                "https://cdn.shopify.com/s/files/1/0087/6193/3920/products/DD1381200_DEOA_2_720x.jpg?v=1612816087",
-                "https://cdn.shopify.com/s/files/1/0087/6193/3920/products/DD1381200_DEOA_1_720x.jpg?v=1612816087",
-                "https://cdn.shopify.com/s/files/1/0087/6193/3920/products/DD1381200_DEOA_3_720x.jpg?v=1612816087",
-                "https://cdn.shopify.com/s/files/1/0087/6193/3920/products/DD1381200_DEOA_5_720x.jpg?v=1612816087",
-                "https://cdn.shopify.com/s/files/1/0087/6193/3920/products/DD1381200_DEOA_4_720x.jpg?v=1612816087"
-            ],
-            currentImage: 'https://cdn.shopify.com/s/files/1/0087/6193/3920/products/DD1381200_DEOA_2_720x.jpg?v=1612816087',
+            currentImage: '',
             sizes: ['XS', 'S', 'M', 'L'],
             currentSize: 'XS'
+        };
+    }
+
+    componentDidUpdate() {
+        if (this.state.currentImage === '') {
+            this.setState(prev => ({
+                ...prev,
+                currentImage: this.props.images[0]
+            }))
+            return false;
         }
+        return false;
     }
 
     setSize(size) {
         console.log(size);
         this.setState(prev => ({
             ...prev,
-            currentSize: size
+            currentSize: size,
         }))
     }
 
     render() {
-        const { images, currentImage, currentSize, sizes } = this.state;
+        const { currentImage, currentSize, sizes } = this.state;
+        const { images } = this.props;
         return (
             <div className='product product__wrapper'>
                 <div className='product__images-small'>
-                    {images.map((image, i) => (
+                    {images && images.map((image, i) => (
                         <img
                             key={i}
                             src={image}

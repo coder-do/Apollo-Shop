@@ -8,14 +8,20 @@ export default class Card extends Component {
         super(props);
     }
     render() {
-        const { isOutOfStock } = this.props;
+        const {
+            isOutOfStock, title, price, currency,
+            mainImage, id, margin, product, onAdd
+        } = this.props;
+
         return (
-            <Link to={isOutOfStock ? '#' : '/product-details/1'}>
-                <div className='card' style={{ opacity: isOutOfStock ? 0.5 : 1 }}>
+            <Link to={isOutOfStock ? '#' : `/product-details/${id}`}>
+                <div className='card'
+                    style={{ opacity: isOutOfStock ? 0.5 : 1, marginRight: margin ? "120px" : "0" }}
+                >
                     <div style={{ position: 'relative' }}>
                         <img
                             className='card__image'
-                            src='https://images.canadagoose.com/image/upload/w_480,c_scale,f_auto,q_auto:best/v1576016110/product-image/2409L_61_d.jpg'
+                            src={mainImage}
                             alt='Card Image'
                         />
                         {isOutOfStock && <p className='out'>OUT OF STOCK</p>}
@@ -27,12 +33,15 @@ export default class Card extends Component {
                         onClick={(e) => {
                             e.preventDefault();
                             if (!isOutOfStock) {
-                                console.log("click")
+                                onAdd({
+                                    ...product,
+                                    qtty: 1
+                                })
                             }
                         }}
                     />
-                    <p className='card__header'>Apollo Running Short</p>
-                    <b className='card__price'>$50.00</b>
+                    <p className='card__header'>{title}</p>
+                    <b className='card__price'>{currency}{price}</b>
                 </div>
             </Link>
         )
