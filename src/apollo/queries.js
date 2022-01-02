@@ -10,6 +10,7 @@ export const ALL_PRODUCTS = gql`
                 category
                 brand
                 gallery
+                description
                 attributes {
                     name
                     type
