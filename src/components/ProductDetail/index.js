@@ -5,9 +5,8 @@ export default class ProductDetail extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            currentImage: '',
-            sizes: ['XS', 'S', 'M', 'L'],
-            currentSize: 'XS'
+            sizes: [],
+            currentImage: ''
         };
     }
 
@@ -15,32 +14,48 @@ export default class ProductDetail extends Component {
         if (this.state.currentImage === '') {
             this.setState(prev => ({
                 ...prev,
-                currentImage: this.props.images[0]
+                currentImage: this.props.images[0],
+                sizes: this.props.product.attributes
             }))
             return true;
         }
     }
 
-    setSize(size) {
-        console.log(size);
+    setSize(name, size, sizes) {
+        let exists = JSON.parse(JSON.stringify(sizes));
+        const newSize = exists.sizes.map(el => {
+            el.items.map(item => {
+                if (item.value === size && name === el.name) {
+                    item.selected = true;
+                }
+                if (name === el.name && item.value !== size) {
+                    item.selected = false;
+                }
+                return item;
+            })
+            return el;
+        });
         this.setState(prev => ({
             ...prev,
-            currentSize: size,
+            sizes: newSize,
         }))
     }
 
     render() {
-        const { currentImage, currentSize, sizes } = this.state;
+        const { currentImage, sizes } = this.state;
         const { product, images, currency, onAdd } = this.props;
 
         const { prices, name, brand, description } = product;
         const price = prices && prices.filter(el => el.currency.symbol === currency);
-        const attributes = product && product.attributes;
 
         const finalProduct = JSON.parse(JSON.stringify(product));
 
         if (!product.hasOwnProperty('qtty')) {
             finalProduct.qtty = 1;
+        }
+
+        if (!product.hasOwnProperty('sizes')) {
+            finalProduct.sizes = sizes;
         }
 
         return (
@@ -75,28 +90,29 @@ export default class ProductDetail extends Component {
                                     display: 'flex', flexDirection: 'column',
                                     maxWidth: '300px'
                                 }}>
-                                    {attributes && attributes.length === 0 && <p style={{ fontSize: '15px', color: 'red' }}>Without attributes</p>}
+                                    {sizes && sizes.length === 0 && <p style={{ fontSize: '15px', color: 'red' }}>Without attributes</p>}
                                     {
-                                        attributes &&
-                                        attributes.length > 0 &&
-                                        attributes.map(attribute => {
+                                        sizes &&
+                                        sizes.length > 0 &&
+                                        sizes.map(size => {
                                             return (
                                                 <div key={Math.random() * 12}>
-                                                    <h3 style={{ fontSize: '20px', margin: '10px 0' }}>{attribute.name}:</h3>
+                                                    <h3 style={{ fontSize: '20px', margin: '10px 0' }}>{size.name}:</h3>
                                                     <div className='sizes__wrapper'>
-                                                        {attribute.items.map(item => (
+                                                        {size.items.map(item => (
                                                             <div
                                                                 key={item.value}
                                                                 style={
                                                                     {
-                                                                        backgroundColor: attribute.name === 'Color' && item.value,
-                                                                        width: attribute.name === 'Capacity' && '60px',
+                                                                        backgroundColor: size.name === 'Color' && item.value,
+                                                                        transform: size.name === 'Color' && item.selected && "scale(0.9)",
+                                                                        width: size.name === 'Capacity' && '60px',
                                                                     }
                                                                 }
-                                                                className={`product__size ${currentSize === item.value ? 'size' : ''}`}
-                                                                onClick={(e) => this.setSize(e.target.value)}
+                                                                className={`product__size ${item.selected ? 'size' : ''}`}
+                                                                onClick={() => this.setSize(size.name, item.value, product)}
                                                             >
-                                                                {attribute.name !== 'Color' && item.value}
+                                                                {size.name !== 'Color' && item.value}
                                                             </div>
                                                         ))}
                                                     </div>

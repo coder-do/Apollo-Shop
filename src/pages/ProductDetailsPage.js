@@ -9,7 +9,8 @@ class ProductDetailsPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            product: {}
+            product: {},
+            sizes: []
         }
     }
 
@@ -24,19 +25,16 @@ class ProductDetailsPage extends Component {
         }))
     }
 
-
     render() {
         const { product } = this.state;
         const { currency, addProd } = this.props;
-        return (
-            product && (
-                <ProductDetail
-                    onAdd={addProd}
-                    product={product}
-                    currency={currency}
-                    images={product.gallery}
-                />
-            )
+        return product && (
+            <ProductDetail
+                onAdd={addProd}
+                product={product}
+                currency={currency}
+                images={product.gallery}
+            />
         )
     }
 }

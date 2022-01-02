@@ -10,10 +10,7 @@ export default class CartElement extends Component {
             images: [],
             currentImage: '',
             currentImageIndex: 0,
-            attributes: [],
-            currentSize: 'S',
-            currentColor: '#',
-            currentCapacity: '',
+            sizes: [],
             qtty: 1
         };
 
@@ -33,7 +30,7 @@ export default class CartElement extends Component {
                 qtty: this.props.product && this.props.product.qtty,
                 images: this.props.product && this.props.product.gallery,
                 currentImage: this.props.product && this.props.product.gallery[0],
-                attributes: this.props.product && this.props.product.attributes
+                sizes: this.props.product && this.props.product.attributes
             }))
         }
         if (this.props.product) {
@@ -56,11 +53,23 @@ export default class CartElement extends Component {
         }))
     }
 
-    setSize(size) {
-        console.log(size);
+    setSize(name, size, sizes) {
+        sizes.map(el => {
+            el.items.map(item => {
+                if (item.value === size && name === el.name) {
+                    item.selected = true;
+                }
+                if (name === el.name && item.value !== size) {
+                    item.selected = false;
+                }
+                return item;
+            })
+            return el;
+        });
+
         this.setState(prev => ({
             ...prev,
-            currentSize: size
+            sizes: sizes
         }))
     }
 
@@ -83,12 +92,18 @@ export default class CartElement extends Component {
 
     render() {
         const {
-            currentSize, currentImageIndex,
+            currentImageIndex, sizes,
             currentImage, images, qtty
         } = this.state;
         const { small, product, currency, onAdd } = this.props;
         const price = product && product.prices.filter(el => el.currency.symbol === currency);
-        const attributes = product && product.attributes;
+
+        const finalProduct = JSON.parse(JSON.stringify(product));
+
+        if (!product.hasOwnProperty('sizes')) {
+            finalProduct.sizes = sizes;
+        }
+
         return (
             <>
                 {!small && <hr className='line' />}
@@ -98,10 +113,10 @@ export default class CartElement extends Component {
                         <p className='cart__subheader'>{product.brand}</p>
                         <p className='cart__price'><b>{price[0].amount} {price[0].currency.symbol}</b></p>
                         <div >
-                            {attributes.length === 0 && <p style={{ fontSize: '15px', color: 'red' }}>Without attributes</p>}
+                            {sizes.length === 0 && <p style={{ fontSize: '15px', color: 'red' }}>Without attributes</p>}
                             {
-                                attributes.length > 0 &&
-                                attributes.map(attribute => {
+                                sizes.length > 0 &&
+                                sizes.map(attribute => {
                                     return (
                                         <div key={Math.random() * 12}>
                                             <h3 className='attribute'>{attribute.name !== 'Size' && attribute.name}</h3>
@@ -112,12 +127,13 @@ export default class CartElement extends Component {
                                                         style={
                                                             {
                                                                 backgroundColor: attribute.name === 'Color' && item.value,
+                                                                transform: attribute.name === 'Color' && item.selected && "scale(0.9)",
                                                                 width: attribute.name === 'Capacity' && !small && '60px',
                                                                 width: attribute.name === 'Capacity' && small && '50px'
                                                             }
                                                         }
-                                                        className={`product__size ${currentSize === item.value ? 'size' : ''}`}
-                                                        onClick={(e) => this.setSize(e.target.value)}
+                                                        className={`product__size ${item.selected ? 'size' : ''}`}
+                                                        onClick={() => this.setSize(attribute.name, item.value, sizes)}
                                                     >
                                                         {attribute.name !== 'Color' && item.value}
                                                     </div>
@@ -133,14 +149,14 @@ export default class CartElement extends Component {
                         <div className='counter'>
                             <div
                                 className='product__size counter__item'
-                                onClick={() => onAdd(product)}
+                                onClick={() => onAdd(finalProduct)}
                             >
                                 &#43;
                             </div>
                             <p className='counter__number'>{qtty}</p>
                             <div
                                 className={`product__size counter__item ${qtty == 0 && 'disabled'}`}
-                                onClick={() => onAdd(product, 1)}
+                                onClick={() => onAdd(finalProduct, 1)}
                             >
                                 &#45;
                             </div>

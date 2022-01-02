@@ -13,6 +13,7 @@ class Modal extends Component {
     render() {
         let totalPrice = 0;
         const { onClose, show, products, currency, onAdd } = this.props;
+
         let checkout_obj = [];
         if (products.length > 0) {
             products.map(el => {
@@ -21,19 +22,19 @@ class Modal extends Component {
                         totalPrice += price.amount * el.qtty;
                     }
                 })
-                const { name, brand, qtty, attributes } = el;
+                const { name, brand, qtty, sizes } = el;
                 checkout_obj = [
                     ...checkout_obj,
                     {
-                        name, brand, qtty, attributes
+                        name, brand, qtty, sizes
                     }
                 ]
             })
             totalPrice = totalPrice.toFixed(2);
-            checkout_obj.push({ totalPrice })
+            checkout_obj.push({ totalPrice, currency: this.props.currency })
         };
 
-        console.log("CHECKOUT OBJECT", checkout_obj);
+
         return (
             <div className="overlay" onClick={onClose} style={{ display: show ? "block" : "none" }}>
                 <div className="modal" style={{ opacity: show ? 1 : 0 }}>
@@ -67,7 +68,8 @@ class Modal extends Component {
                                     </button>
                                 </Link>
                                 <button onClick={() => {
-                                    window.alert('see console for checkout')
+                                    window.alert('see console for checkout');
+                                    console.log("CHECKOUT", checkout_obj);
                                 }} className="checkout__btn">
                                     checkout
                                 </button>

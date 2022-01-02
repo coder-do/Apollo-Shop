@@ -8,11 +8,21 @@ export const getData = async () => {
             query: ALL_PRODUCTS
         })
         .then(({ data }) => {
-            products = data.category.products
-            clothes = data.category.products.filter(el => {
+            let finalData = JSON.parse(JSON.stringify(data));
+            finalData = finalData.category.products.map(el => {
+                el.attributes.map(attribute => {
+                    attribute.items.map(item => {
+                        item.selected = false;
+                    })
+                })
+                el.sizes = el.attributes;
+                return el;
+            });
+            products = finalData;
+            clothes = finalData.filter(el => {
                 return el.category === 'clothes'
             });
-            tech = data.category.products.filter(el => {
+            tech = finalData.filter(el => {
                 return el.category === 'tech'
             })
         })
