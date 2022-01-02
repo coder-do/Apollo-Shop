@@ -14,7 +14,11 @@ export default class Header extends Component {
             <div className='header'>
                 <Nav />
                 <Logo />
-                <CurrencyBlock show={this.props.show} items={this.props.items} />
+                <CurrencyBlock
+                    show={this.props.show}
+                    items={this.props.items}
+                    changeCurrency={this.props.changeCurrency}
+                />
             </div>
         )
     }

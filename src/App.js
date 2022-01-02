@@ -8,6 +8,8 @@ import ProductDetailsPage from './pages/ProductDetailsPage';
 import ClothesPage from './pages/ClothesPage';
 import TechPage from './pages/TechPage';
 import Modal from './components/Modal';
+import Container from './components/Container';
+import { currencyChange } from './redux/actions';
 
 class App extends Component {
     constructor(props) {
@@ -20,39 +22,46 @@ class App extends Component {
     }
 
     show() {
-        this.setState({ show: true })
+        this.setState({ show: true });
+        // prevent scroll when modal is open 
+        document.body.style.overflow = 'unset';
     }
 
     close() {
-        this.setState({ show: false })
+        this.setState({ show: false });
+        // set scroll visible when modal is closed 
+        document.body.style.overflow = 'visible'
     }
 
     render() {
-        const { items } = this.props;
+        const { items, changeCurrency, products, currency } = this.props;
         return (
-            <>
-                <div className='container'>
-                    <Header show={this.show} items={items} />
-                    <div className='wrapper'>
-                        <Modal onClose={this.close} show={this.state.show} />
-                    </div>
-                    <Routes>
-                        <Route path="/" element={<HomePage />} />
-                        <Route path="cart" element={<CartPage />} />
-                        <Route path="clothes" element={<ClothesPage />} />
-                        <Route path="tech" element={<TechPage />} />
-                        <Route path="product-details/:id" element={<ProductDetailsPage />} />
-                        <Route
-                            path="*"
-                            element={
-                                <main style={{ padding: "1rem" }}>
-                                    <p>There's nothing here!</p>
-                                </main>
-                            }
-                        />
-                    </Routes>
-                </div >
-            </>
+            <Container>
+                <Header show={this.show} items={items} changeCurrency={changeCurrency} />
+                <div className='wrapper'>
+                    <Modal
+                        products={products}
+                        currency={currency}
+                        onClose={this.close}
+                        show={this.state.show}
+                    />
+                </div>
+                <Routes>
+                    <Route path="/" element={<HomePage />} />
+                    <Route path="cart" element={<CartPage />} />
+                    <Route path="clothes" element={<ClothesPage />} />
+                    <Route path="tech" element={<TechPage />} />
+                    <Route path="product-details/:id" element={<ProductDetailsPage />} />
+                    <Route
+                        path="*"
+                        element={
+                            <main style={{ padding: "1rem" }}>
+                                <p>There's nothing here!</p>
+                            </main>
+                        }
+                    />
+                </Routes>
+            </Container>
         )
     }
 }
@@ -60,8 +69,16 @@ class App extends Component {
 const mapStateToProps = state => {
     console.log(state);
     return {
-        items: state.products.length
+        items: state.products.length,
+        products: state.products,
+        currency: state.currency
     }
 }
 
-export default connect(mapStateToProps)(App);
+const mapDispatchToProps = dispatch => {
+    return {
+        changeCurrency: (symbol) => dispatch(currencyChange(symbol))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

@@ -7,23 +7,43 @@ export default class CartElement extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            images: [
-                "https://cdn.shopify.com/s/files/1/0087/6193/3920/products/DD1381200_DEOA_2_720x.jpg?v=1612816087",
-                "https://cdn.shopify.com/s/files/1/0087/6193/3920/products/DD1381200_DEOA_1_720x.jpg?v=1612816087",
-                "https://cdn.shopify.com/s/files/1/0087/6193/3920/products/DD1381200_DEOA_3_720x.jpg?v=1612816087",
-                "https://cdn.shopify.com/s/files/1/0087/6193/3920/products/DD1381200_DEOA_5_720x.jpg?v=1612816087",
-                "https://cdn.shopify.com/s/files/1/0087/6193/3920/products/DD1381200_DEOA_4_720x.jpg?v=1612816087"
-            ],
-            currentImage: 'https://cdn.shopify.com/s/files/1/0087/6193/3920/products/DD1381200_DEOA_2_720x.jpg?v=1612816087',
+            images: [],
+            currentImage: '',
             currentImageIndex: 0,
-            sizes: ['XS', 'S', 'M', 'L'],
+            attributes: [],
             currentSize: 'S',
+            currentColor: '#',
+            currentCapacity: '',
             qtty: 1
         };
 
         this.setSize = this.setSize.bind(this);
         this.counter = this.counter.bind(this);
         this.setCurrentImage = this.setCurrentImage.bind(this);
+    }
+
+    componentDidMount() {
+        this.forceUpdate();
+    }
+
+    componentDidUpdate() {
+        if (this.state.currentImage === '') {
+            this.setState(prev => ({
+                ...prev,
+                qtty: this.props.product && this.props.product.qtty,
+                images: this.props.product && this.props.product.gallery,
+                currentImage: this.props.product && this.props.product.gallery[0],
+                attributes: this.props.product && this.props.product.attributes
+            }))
+        }
+        if (this.props.product) {
+            if (this.props.product.qtty !== this.state.qtty) {
+                this.setState(prev => ({
+                    ...prev,
+                    qtty: this.props.product.qtty
+                }))
+            }
+        }
     }
 
     counter(n) {
@@ -46,55 +66,81 @@ export default class CartElement extends Component {
 
     setCurrentImage(index) {
         const { images } = this.state;
-        if (index < 0) {
-            index = images.length - 1;
+        if (images.length > 0) {
+            if (index < 0) {
+                index = images.length - 1;
+            }
+            if (index > images.length - 1) {
+                index = 0;
+            }
+            this.setState(prev => ({
+                ...prev,
+                currentImage: images[index],
+                currentImageIndex: index
+            }))
         }
-        if (index > images.length - 1) {
-            index = 0;
-        }
-        this.setState(prev => ({
-            ...prev,
-            currentImage: images[index],
-            currentImageIndex: index
-        }))
     }
 
     render() {
         const {
-            sizes, currentSize, currentImageIndex,
+            currentSize, currentImageIndex,
             currentImage, images, qtty
         } = this.state;
-        const { small } = this.props;
-
+        const { small, product, currency, onAdd } = this.props;
+        const price = product && product.prices.filter(el => el.currency.symbol === currency);
+        const attributes = product && product.attributes;
         return (
             <>
                 {!small && <hr className='line' />}
-                <div className={`cart ${small && 'small'}`}>
+                {product && (<div className={`cart ${small && 'small'}`}>
                     <div className='cart__block1'>
-                        <h3 className='cart__header'>Apollo</h3>
-                        <p className='cart__subheader'>Running Short</p>
-                        <p className='cart__price'><b>{`$ 50.00`}</b></p>
-                        <div className='sizes__wrapper'>
-                            {sizes.map(size => (
-                                <div key={size} className={`product__size ${currentSize === size ? 'size' : ''}`}
-                                    onClick={() => this.setSize(size)}>
-                                    {size}
-                                </div>
-                            ))}
+                        <h3 className='cart__header'>{product.name}</h3>
+                        <p className='cart__subheader'>{product.brand}</p>
+                        <p className='cart__price'><b>{price[0].amount} {price[0].currency.symbol}</b></p>
+                        <div >
+                            {attributes.length === 0 && <p style={{ fontSize: '15px', color: 'red' }}>Without attributes</p>}
+                            {
+                                attributes.length > 0 &&
+                                attributes.map(attribute => {
+                                    return (
+                                        <div key={Math.random() * 12}>
+                                            <h3 className='attribute'>{attribute.name !== 'Size' && attribute.name}</h3>
+                                            <div className='sizes__wrapper'>
+                                                {attribute.items.map(item => (
+                                                    <div
+                                                        key={item.value}
+                                                        style={
+                                                            {
+                                                                backgroundColor: attribute.name === 'Color' && item.value,
+                                                                width: attribute.name === 'Capacity' && !small && '60px',
+                                                                width: attribute.name === 'Capacity' && small && '50px'
+                                                            }
+                                                        }
+                                                        className={`product__size ${currentSize === item.value ? 'size' : ''}`}
+                                                        onClick={(e) => this.setSize(e.target.value)}
+                                                    >
+                                                        {attribute.name !== 'Color' && item.value}
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )
+                                })
+                            }
                         </div>
                     </div>
                     <div className='cart__block2'>
                         <div className='counter'>
                             <div
                                 className='product__size counter__item'
-                                onClick={() => this.counter(qtty + 1)}
+                                onClick={() => onAdd(product)}
                             >
                                 &#43;
                             </div>
                             <p className='counter__number'>{qtty}</p>
                             <div
                                 className={`product__size counter__item ${qtty == 0 && 'disabled'}`}
-                                onClick={() => this.counter(qtty - 1)}
+                                onClick={() => onAdd(product, 1)}
                             >
                                 &#45;
                             </div>
@@ -126,6 +172,7 @@ export default class CartElement extends Component {
                         </div>
                     </div>
                 </div>
+                )}
             </>
         )
     }

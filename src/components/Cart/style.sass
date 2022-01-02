@@ -3,12 +3,16 @@
     margin: 0
     padding: 0
     opacity: 0.5
+    margin-bottom: 30px
 
 .cart
     display: flex
     justify-content: space-between
     align-items: center
     margin-bottom: 20px
+
+    .attribute
+        margin: 10px 0
 
     .cart-header
         margin-top: 80px
@@ -22,8 +26,8 @@
 
     .sizes__wrapper
         display: flex,
-        justify-content: space-between,
         max-width: 300px
+        margin-bottom: 15px
 
         div:not(:last-child)
             margin-right: 12px
@@ -32,7 +36,8 @@
         font-style: normal
         font-weight: 600
         font-size: 30px
-        line-height: 27px
+        line-height: 45px
+        margin: 5px 0
         color: #1D1F22
 
     &__subheader
@@ -40,6 +45,7 @@
         font-weight: normal
         font-size: 30px
         line-height: 27px
+        margin: 0
         color: #1D1F22
 
     &__price
@@ -61,6 +67,9 @@
         &:hover
             cursor: pointer
 
+    .color
+        transform: scale(0.9)
+
     .size
         background-color: #000
         color: #fff
@@ -70,8 +79,8 @@
         align-items: center
 
         .item__image
-            max-width: 141px
-            max-height: 185px
+            max-width: 135px
+            max-height: 200px
 
         .images
             position: relative
@@ -134,11 +143,22 @@
 .small
     color: #1D1F22
 
+    .attribute
+        margin: 10px 0
+        font-size: 13.5px
+        font-weight: 500
+
+    .cart__subheader
+        margin-top: 11px
+
+    .cart__header
+        max-width: 100px
+
     &:not(:last-of-type)
         margin-bottom: 30px
 
     .item__image
-        max-width: 105px
+        max-width: 91px
         max-height: 137px
 
     .sizes__wrapper
@@ -150,6 +170,9 @@
         font-weight: 300
         font-size: 16px
         line-height: 20px
+
+    .cart__block2
+        margin-bottom: 10px
 
     .cart__price
         font-weight: 500
@@ -177,7 +200,6 @@
         display: flex
         justify-content: space-between
         flex-direction: column
-        margin-bottom: -11px
 
         &__number
             font-size: 16px

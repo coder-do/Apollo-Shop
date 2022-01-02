@@ -16,30 +16,16 @@ export default class CurrencyBlock extends Component {
 
 
     render() {
-        const { selectedValue } = this.state;
-        const { items } = this.props;
-        console.log(selectedValue);
+        const { items, changeCurrency } = this.props;
         return (
             <div className='currency'>
                 <div className='currency__block'>
-                    {/* <label htmlFor='cur'>
-                        {selectedValue}
-                        <select id='cur' name='cur' onChange={(e) => this.setState((prevState) => ({
-                            ...prevState,
-                            selectedValue: e.target.value
-                        }))} value={selectedValue}>
-                            <option value='$'>$ USD</option>
-                            <option value='£'>£ EUR</option>
-                            <option value='¥'>¥ JPY</option>
-                        </select>
-                    </label> */}
-                    <select onChange={(e) => this.setState((prevState) => ({
-                        ...prevState,
-                        selectedValue: e.target.value
-                    }))}>
+                    <select defaultValue={' '} onChange={(e) => changeCurrency(e.target.value)}>
                         <option value='$'>$ USD</option>
                         <option value='£'>£ EUR</option>
                         <option value='¥'>¥ JPY</option>
+                        <option value='₽'>₽ RUB</option>
+                        <option value='A$'>A$ AUD</option>
                     </select>
                 </div>
                 <div onClick={this.props.show} style={{
