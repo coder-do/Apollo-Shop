@@ -1,20 +1,44 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import Cart from '../components/Cart';
 import CartElement from '../components/Cart/CartElement';
+import { addProduct } from '../redux/actions';
 
-export default class CartPage extends Component {
+class CartPage extends Component {
     constructor(props) {
         super(props)
     }
+
     render() {
-        const image = 'https://images.canadagoose.com/image/upload/w_480,c_scale,f_auto,q_auto:best/v1576016110/product-image/2409L_61_d.jpg';
+        const { products, currency, onAdd } = this.props;
         return (
             <Cart>
-                <CartElement image={image} />
-                <CartElement image={image} />
-                <CartElement image={image} />
-                <CartElement image={image} />
+                {products.map(product => {
+                    return (
+                        <CartElement
+                            key={(Math.random() + 1).toString(36).substring(7)}
+                            onAdd={onAdd}
+                            product={product}
+                            currency={currency}
+                        />
+                    )
+                })}
             </Cart>
         )
     }
 }
+
+const mapStateToProps = state => {
+    return {
+        products: state.products,
+        currency: state.currency
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        onAdd: (product, qtty = 0) => dispatch(addProduct(product, qtty))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CartPage);

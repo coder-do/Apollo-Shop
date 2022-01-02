@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import Card from '../components/Card';
 import { getData } from '../apollo/getData';
+import { connect } from 'react-redux';
+import { addProduct } from '../redux/actions';
+import PageHeader from '../components/PageHeader';
+import CardsWrapper from '../components/Card/CardsWrapper';
+import Container from '../components/Container';
 
-export default class TechPage extends Component {
+class TechPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -20,31 +25,46 @@ export default class TechPage extends Component {
 
     render() {
         const { products } = this.state;
+        const { addProd, currency } = this.props;
         return (
-            <div className='container'>
-                <h1 style={{
-                    fontSize: '42px', lineHeight: '160%', color: '#1D1F22', fontWeight: 400,
-                    marginTop: "80px", marginBottom: "50px",
+            <Container>
+                <PageHeader>
+                    Tech
+                </PageHeader>
 
-
-                }}>Tech</h1>
-
-                <div style={{
-                    display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between',
-                }}>
-                    {products.length > 0 && products.map((product, i) => (
-                        <Card
-                            key={i}
-                            id={product.id}
-                            title={product.name}
-                            mainImage={product.gallery[0]}
-                            price={product.prices[0].amount}
-                            currency={product.prices[0].currency.symbol}
-                            isOutOfStock={!product.inStock}
-                        />
-                    ))}
-                </div>
-            </div>
+                <CardsWrapper between>
+                    {products.length > 0 && products.map((product, i) => {
+                        const price = product.prices.filter(el => el.currency.symbol === currency);
+                        return (
+                            <Card
+                                key={i}
+                                id={product.id}
+                                onAdd={addProd}
+                                product={product}
+                                title={product.name}
+                                mainImage={product.gallery[0]}
+                                price={price[0].amount}
+                                currency={price[0].currency.symbol}
+                                isOutOfStock={!product.inStock}
+                            />
+                        )
+                    })}
+                </CardsWrapper>
+            </Container>
         )
     }
 }
+
+const mapStateToProps = state => {
+    return {
+        currency: state.currency
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        addProd: (product) => dispatch(addProduct(product))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(TechPage);
