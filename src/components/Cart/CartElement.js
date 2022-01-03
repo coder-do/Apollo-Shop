@@ -155,7 +155,7 @@ export default class CartElement extends Component {
                             </div>
                             <p className='counter__number'>{qtty}</p>
                             <div
-                                className={`product__size counter__item ${qtty == 0 && 'disabled'}`}
+                                className={`product__size counter__item ${qtty === 0 && 'disabled'}`}
                                 onClick={() => onAdd(finalProduct, 1)}
                             >
                                 &#45;
