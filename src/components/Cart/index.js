@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './style.sass'
 
 export default class Cart extends Component {
     constructor(props) {

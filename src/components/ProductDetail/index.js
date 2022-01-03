@@ -21,9 +21,9 @@ export default class ProductDetail extends Component {
         }
     }
 
-    setSize(name, size, sizes) {
-        let exists = JSON.parse(JSON.stringify(sizes));
-        const newSize = exists.sizes.map(el => {
+    setSize(name, size, product) {
+        // let exists = JSON.parse(JSON.stringify(product));
+        product.sizes.map(el => {
             el.items.map(item => {
                 if (item.value === size && name === el.name) {
                     item.selected = true;
@@ -37,7 +37,7 @@ export default class ProductDetail extends Component {
         });
         this.setState(prev => ({
             ...prev,
-            sizes: newSize,
+            sizes: product.sizes,
         }))
     }
 
@@ -55,8 +55,8 @@ export default class ProductDetail extends Component {
         }
 
         if (!product.hasOwnProperty('sizes')) {
-            finalProduct.sizes = sizes;
-        }
+            finalProduct.sizes = sizes.length > 0 && sizes;
+        };
 
         return (
             <>
@@ -92,7 +92,6 @@ export default class ProductDetail extends Component {
                                 }}>
                                     {sizes && sizes.length === 0 && <p style={{ fontSize: '15px', color: 'red' }}>Without attributes</p>}
                                     {
-                                        sizes &&
                                         sizes.length > 0 &&
                                         sizes.map(size => {
                                             return (

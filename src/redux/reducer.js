@@ -8,15 +8,6 @@ export const reducer = (state = initialState, action) => {
         case 'ADD_PRODUCT':
             let newProd;
             let exist = state.products.filter(el => el.id === action.payload.product.id);
-            if (action.payload.qtty === 1) {
-                exist = [];
-                newProd = state.products.map(prod => {
-                    if (prod.id === action.payload.product.id && action.payload.product.qtty !== 0) {
-                        prod.qtty--;
-                    }
-                    return prod;
-                })
-            }
             if (exist.length > 0) {
                 newProd = state.products.map(prod => {
                     if (prod.id === exist[0].id) {
@@ -24,13 +15,40 @@ export const reducer = (state = initialState, action) => {
                     }
                     return prod;
                 })
-            } if (exist.length === 0 && action.payload.qtty !== 1) {
+            } if (exist.length === 0) {
                 newProd = [...state.products, action.payload.product];
             }
+
             return {
                 ...state,
                 products: newProd
             };
+        case 'REMOVE_PRODUCT':
+            let newProduct;
+            if (action.payload.product.qtty - 1 === 0) {
+                if (window.confirm('Are you sure to remove cart item?')) {
+                    newProduct = state.products.filter(prod => prod.id !== action.payload.product.id);
+                } else {
+                    newProduct = state.products.map(prod => {
+                        if (prod.id === action.payload.product.id) {
+                            prod.qtty = 1;
+                        }
+                        return prod;
+                    })
+                }
+            }
+            if (action.payload.product.qtty > 1) {
+                newProduct = state.products.map(prod => {
+                    if (prod.id === action.payload.product.id) {
+                        prod.qtty--;
+                    }
+                    return prod;
+                })
+            }
+            return {
+                ...state,
+                products: newProduct
+            }
         case 'CHANGE_CURRENCY':
             return {
                 ...state,

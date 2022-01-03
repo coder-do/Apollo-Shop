@@ -37,7 +37,8 @@ export default class CartElement extends Component {
             if (this.props.product.qtty !== this.state.qtty) {
                 this.setState(prev => ({
                     ...prev,
-                    qtty: this.props.product.qtty
+                    qtty: this.props.product.qtty,
+                    sizes: this.props.product.sizes
                 }))
             }
         }
@@ -95,7 +96,7 @@ export default class CartElement extends Component {
             currentImageIndex, sizes,
             currentImage, images, qtty
         } = this.state;
-        const { small, product, currency, onAdd } = this.props;
+        const { small, product, currency, onAdd, onRemove } = this.props;
         const price = product && product.prices.filter(el => el.currency.symbol === currency);
 
         const finalProduct = JSON.parse(JSON.stringify(product));
@@ -155,8 +156,8 @@ export default class CartElement extends Component {
                             </div>
                             <p className='counter__number'>{qtty}</p>
                             <div
-                                className={`product__size counter__item ${qtty == 0 && 'disabled'}`}
-                                onClick={() => onAdd(finalProduct, 1)}
+                                className={`product__size counter__item ${qtty === 0 && 'disabled'}`}
+                                onClick={() => onRemove(finalProduct)}
                             >
                                 &#45;
                             </div>
