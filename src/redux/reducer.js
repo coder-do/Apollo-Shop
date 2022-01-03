@@ -13,20 +13,6 @@ export const reducer = (state = initialState, action) => {
                     if (prod.id === exist[0].id) {
                         prod.qtty++;
                     }
-                    // this is to check when we add same item again
-                    // and this checks if attribute we changed in product details page
-                    // if it`s not equal to attribute we have in cart 
-                    // it`s going to change in cart and mini cart
-                    // prod.sizes.map((size, i) => size.items.map((item, j) => {
-                    //     console.log(prod);
-                    //     console.log(size);
-                    //     console.log(item);
-                    //     if (item.selected !== action.payload.product.sizes[i].items[j].selected
-                    //         && prod.id === exist[0].id) {
-                    //         item.selected = !item.selected;
-                    //     }
-                    // }))
-
                     return prod;
                 })
             } if (exist.length === 0) {
