@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { addProduct } from "../../redux/actions";
+import { addProduct, removeProduct } from '../../redux/actions';
 import CartElement from "../Cart/CartElement";
 import "./style.sass";
 
@@ -12,7 +12,7 @@ class Modal extends Component {
 
     render() {
         let totalPrice = 0;
-        const { onClose, show, products, currency, onAdd } = this.props;
+        const { onClose, show, products, currency, onAdd, onRemove } = this.props;
 
         let checkout_obj = [];
         if (products.length > 0) {
@@ -52,6 +52,7 @@ class Modal extends Component {
                                         key={(Math.random() + 1).toString(36).substring(7)}
                                         product={product}
                                         currency={currency}
+                                        onRemove={onRemove}
                                     />
                                 )
                             })}
@@ -91,7 +92,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAdd: (product, qtty = 0) => dispatch(addProduct(product, qtty))
+        onAdd: (product) => dispatch(addProduct(product)),
+        onRemove: (product) => dispatch(removeProduct(product))
     }
 }
 

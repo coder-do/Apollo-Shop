@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Cart from '../components/Cart';
 import CartElement from '../components/Cart/CartElement';
-import { addProduct } from '../redux/actions';
+import { addProduct, removeProduct } from '../redux/actions';
 
 class CartPage extends Component {
     constructor(props) {
@@ -10,16 +10,18 @@ class CartPage extends Component {
     }
 
     render() {
-        const { products, currency, onAdd } = this.props;
+        const { products, currency, onAdd, onRemove } = this.props;
         return (
             <Cart>
-                {products.map(product => {
+                {products.length === 0 && <p style={{ marginTop: '50px' }}>Cart is empty</p>}
+                {products.length > 0 && products.map(product => {
                     return (
                         <CartElement
                             key={(Math.random() + 1).toString(36).substring(7)}
                             onAdd={onAdd}
                             product={product}
                             currency={currency}
+                            onRemove={onRemove}
                         />
                     )
                 })}
@@ -37,7 +39,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        onAdd: (product, qtty = 0) => dispatch(addProduct(product, qtty))
+        onAdd: (product, qtty = 0) => dispatch(addProduct(product, qtty)),
+        onRemove: (product) => dispatch(removeProduct(product))
     }
 }
 
