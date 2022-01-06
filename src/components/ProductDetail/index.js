@@ -45,7 +45,8 @@ export default class ProductDetail extends Component {
         const { currentImage, sizes } = this.state;
         const { product, images, currency, onAdd } = this.props;
 
-        const { prices, name, brand, description } = product;
+        const { prices, name, brand, description, inStock } = product;
+
         const price = prices && prices.filter(el => el.currency.symbol === currency);
 
         const finalProduct = JSON.parse(JSON.stringify(product));
@@ -104,7 +105,7 @@ export default class ProductDetail extends Component {
                                                                 style={
                                                                     {
                                                                         backgroundColor: size.name === 'Color' && item.value,
-                                                                        transform: size.name === 'Color' && item.selected && "scale(0.9)",
+                                                                        transform: size.name === 'Color' && item.selected && "scale(0.8)",
                                                                         width: size.name === 'Capacity' && '60px',
                                                                     }
                                                                 }
@@ -126,10 +127,11 @@ export default class ProductDetail extends Component {
                                 <span>{price && price[0].currency.symbol}{price && price[0].amount}</span>
                             </div>
                             <button
+                                disabled={!inStock}
                                 className='product__btn'
                                 onClick={() => onAdd(finalProduct)}
                             >
-                                Add to cart
+                                {!inStock ? 'OUT OF STOCK' : 'Add to cart'}
                             </button>
                             <p className='product__descr' dangerouslySetInnerHTML={{ __html: description }} />
                         </div>

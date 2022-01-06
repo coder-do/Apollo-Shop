@@ -10,13 +10,13 @@ export default class Card extends Component {
     render() {
         const {
             isOutOfStock, title, price, currency,
-            mainImage, id, margin, product, onAdd
+            mainImage, id, margin, product, onAdd,
         } = this.props;
 
         return (
-            <Link to={isOutOfStock ? '#' : `/product-details/${id}`}>
+            <Link to={`/product-details/${id}`}>
                 <div className='card'
-                    style={{ opacity: isOutOfStock ? 0.5 : 1, marginRight: margin ? "120px" : "0" }}
+                    style={{ opacity: isOutOfStock ? 0.6 : 1, marginRight: margin ? "120px" : "0" }}
                 >
                     <div style={{ position: 'relative' }}>
                         <img
@@ -40,7 +40,7 @@ export default class Card extends Component {
                             }
                         }}
                     />
-                    <p className='card__header'>{title}</p>
+                    <p className='card__header'>{title} {product.brand}</p>
                     <b className='card__price'>{currency}{price}</b>
                 </div>
             </Link>

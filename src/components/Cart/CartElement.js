@@ -128,7 +128,7 @@ export default class CartElement extends Component {
                                                         style={
                                                             {
                                                                 backgroundColor: attribute.name === 'Color' && item.value,
-                                                                transform: attribute.name === 'Color' && item.selected && "scale(0.9)",
+                                                                transform: attribute.name === 'Color' && item.selected && "scale(0.8)",
                                                                 width: attribute.name === 'Capacity' && !small && '60px',
                                                                 width: attribute.name === 'Capacity' && small && '50px'
                                                             }

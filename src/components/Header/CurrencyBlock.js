@@ -21,6 +21,7 @@ export default class CurrencyBlock extends Component {
             <div className='currency'>
                 <div className='currency__block'>
                     <select defaultValue={' '} onChange={(e) => changeCurrency(e.target.value)}>
+                        <option style={{ display: 'none' }}>$</option>
                         <option value='$'>$ USD</option>
                         <option value='£'>£ EUR</option>
                         <option value='¥'>¥ JPY</option>

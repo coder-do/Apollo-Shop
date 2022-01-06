@@ -8,9 +8,9 @@ export default class CardsWrapper extends Component {
     render() {
         let justifyContent = 'unset';
 
-        if (this.props.around) {
+        if (this.props.position === 'around') {
             justifyContent = 'space-around'
-        } if (this.props.between) {
+        } if (this.props.position === 'between') {
             justifyContent = 'space-between';
         }
 
