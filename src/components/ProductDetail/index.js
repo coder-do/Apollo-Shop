@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import parse from 'html-react-parser';
 import './style.sass';
 
 export default class ProductDetail extends Component {
@@ -39,7 +40,6 @@ export default class ProductDetail extends Component {
                 isDisabled: false
             }))
         }
-        console.log(selectedCount, sizesLength);
     }
 
     setSize(name, size, product) {
@@ -157,7 +157,9 @@ export default class ProductDetail extends Component {
                             >
                                 {!inStock ? 'OUT OF STOCK' : 'Add to cart'}
                             </button>
-                            <p className='product__descr' dangerouslySetInnerHTML={{ __html: description }} />
+                            <div className='product__descr'>
+                                {parse(`${description}`)}
+                            </div>
                         </div>
                     </div>
                 )}
