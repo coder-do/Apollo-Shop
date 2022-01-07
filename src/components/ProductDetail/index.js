@@ -6,11 +6,16 @@ export default class ProductDetail extends Component {
         super(props)
         this.state = {
             sizes: [],
-            currentImage: ''
+            currentImage: '',
+            isDisabled: true
         };
-    }
+    };
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps) {
+        if (Object.keys(prevProps.product).length !== 0
+            && this.state.isDisabled == true) {
+            this.checkAttributes();
+        }
         if (this.state.currentImage === '') {
             this.setState(prev => ({
                 ...prev,
@@ -21,8 +26,23 @@ export default class ProductDetail extends Component {
         }
     }
 
+    checkAttributes() {
+        let sizes = this.state.sizes;
+        const sizesLength = sizes.length;
+        let selectedCount = 0;
+        sizes.map(size => {
+            return size.items.map(item => item.selected && ++selectedCount)
+        });
+        if (sizesLength === selectedCount) {
+            this.setState(prev => ({
+                ...prev,
+                isDisabled: false
+            }))
+        }
+        console.log(selectedCount, sizesLength);
+    }
+
     setSize(name, size, product) {
-        // let exists = JSON.parse(JSON.stringify(product));
         product.sizes.map(el => {
             el.items.map(item => {
                 if (item.value === size && name === el.name) {
@@ -35,20 +55,14 @@ export default class ProductDetail extends Component {
             })
             return el;
         });
+        this.checkAttributes();
         this.setState(prev => ({
             ...prev,
             sizes: product.sizes,
         }))
     }
 
-    render() {
-        const { currentImage, sizes } = this.state;
-        const { product, images, currency, onAdd } = this.props;
-
-        const { prices, name, brand, description, inStock } = product;
-
-        const price = prices && prices.filter(el => el.currency.symbol === currency);
-
+    getFinalProduct(product, sizes) {
         const finalProduct = JSON.parse(JSON.stringify(product));
 
         if (!product.hasOwnProperty('qtty')) {
@@ -58,6 +72,19 @@ export default class ProductDetail extends Component {
         if (!product.hasOwnProperty('sizes')) {
             finalProduct.sizes = sizes.length > 0 && sizes;
         };
+
+        return finalProduct;
+    }
+
+    render() {
+        const { currentImage, sizes, isDisabled } = this.state;
+        const { product, images, currency, onAdd } = this.props;
+
+        const { prices, name, brand, description, inStock } = product;
+
+        const price = prices && prices.filter(el => el.currency.symbol === currency);
+
+        const finalProduct = this.getFinalProduct(product, sizes);
 
         return (
             <>
@@ -87,11 +114,8 @@ export default class ProductDetail extends Component {
                             <h2 className='product__header'>{name}</h2>
                             <p className='product__subheader'>{brand}</p>
                             <div className='product__sizes'>
-                                <div style={{
-                                    display: 'flex', flexDirection: 'column',
-                                    maxWidth: '300px'
-                                }}>
-                                    {sizes && sizes.length === 0 && <p style={{ fontSize: '15px', color: 'red' }}>Without attributes</p>}
+                                <div className='product__sizesWrapper'>
+                                    {sizes && sizes.length === 0 && <p className='without'>Without attributes</p>}
                                     {
                                         sizes.length > 0 &&
                                         sizes.map(size => {
@@ -127,8 +151,8 @@ export default class ProductDetail extends Component {
                                 <span>{price && price[0].currency.symbol}{price && price[0].amount}</span>
                             </div>
                             <button
-                                disabled={!inStock}
-                                className='product__btn'
+                                disabled={!inStock || isDisabled}
+                                className={`product__btn ${isDisabled && 'bg-gray'}`}
                                 onClick={() => onAdd(finalProduct)}
                             >
                                 {!inStock ? 'OUT OF STOCK' : 'Add to cart'}
@@ -137,6 +161,7 @@ export default class ProductDetail extends Component {
                         </div>
                     </div>
                 )}
-            </>)
+            </>
+        )
     }
 }

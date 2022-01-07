@@ -13,7 +13,7 @@ class CartPage extends Component {
         const { products, currency, onAdd, onRemove } = this.props;
         return (
             <Cart>
-                {products.length === 0 && <p style={{ marginTop: '50px' }}>Cart is empty</p>}
+                {products.length === 0 && <p className='emptyCart'>Cart is empty</p>}
                 {products.length > 0 && products.map(product => {
                     return (
                         <CartElement

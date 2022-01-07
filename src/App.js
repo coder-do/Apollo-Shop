@@ -55,7 +55,7 @@ class App extends Component {
                     <Route
                         path="*"
                         element={
-                            <main style={{ padding: "1rem" }}>
+                            <main className='main'>
                                 <p>There's nothing here!</p>
                             </main>
                         }

@@ -10,7 +10,7 @@ export default class Card extends Component {
     render() {
         const {
             isOutOfStock, title, price, currency,
-            mainImage, id, margin, product, onAdd,
+            mainImage, id, margin, product
         } = this.props;
 
         return (
@@ -18,7 +18,7 @@ export default class Card extends Component {
                 <div className='card'
                     style={{ opacity: isOutOfStock ? 0.6 : 1, marginRight: margin ? "120px" : "0" }}
                 >
-                    <div style={{ position: 'relative' }}>
+                    <div className='outOfStock'>
                         <img
                             className='card__image'
                             src={mainImage}
@@ -30,15 +30,8 @@ export default class Card extends Component {
                         src={image}
                         alt='cart'
                         className={`${!isOutOfStock ? "show" : "hide"} add`}
-                        onClick={(e) => {
-                            e.preventDefault();
-                            if (!isOutOfStock) {
-                                onAdd({
-                                    ...product,
-                                    qtty: 1
-                                })
-                            }
-                        }}
+                    // as we can't add product without attributes
+                    // this should be a link to PDP page
                     />
                     <p className='card__header'>{title} {product.brand}</p>
                     <b className='card__price'>{currency}{price}</b>

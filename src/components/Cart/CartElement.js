@@ -114,7 +114,7 @@ export default class CartElement extends Component {
                         <p className='cart__subheader'>{product.brand}</p>
                         <p className='cart__price'><b>{price[0].amount} {price[0].currency.symbol}</b></p>
                         <div >
-                            {sizes.length === 0 && <p style={{ fontSize: '15px', color: 'red' }}>Without attributes</p>}
+                            {sizes.length === 0 && <p className='without'>Without attributes</p>}
                             {
                                 sizes.length > 0 &&
                                 sizes.map(attribute => {
