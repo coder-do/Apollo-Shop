@@ -76,13 +76,25 @@ export default class ProductDetail extends Component {
         return finalProduct;
     }
 
+    filterPrice(prices, currency) {
+        return prices.filter(el => el.currency.symbol === currency)
+    }
+
+    makeStyle(name, value, selected) {
+        return {
+            backgroundColor: name === 'Color' && value,
+            transform: name === 'Color' && selected && "scale(0.8)",
+            width: name === 'Capacity' && '60px',
+        }
+    }
+
     render() {
         const { currentImage, sizes, isDisabled } = this.state;
         const { product, images, currency, onAdd } = this.props;
 
         const { prices, name, brand, description, inStock } = product;
 
-        const price = prices && prices.filter(el => el.currency.symbol === currency);
+        const price = prices && this.filterPrice(prices, currency);
 
         const finalProduct = this.getFinalProduct(product, sizes);
 
@@ -126,13 +138,7 @@ export default class ProductDetail extends Component {
                                                         {size.items.map(item => (
                                                             <div
                                                                 key={item.value}
-                                                                style={
-                                                                    {
-                                                                        backgroundColor: size.name === 'Color' && item.value,
-                                                                        transform: size.name === 'Color' && item.selected && "scale(0.8)",
-                                                                        width: size.name === 'Capacity' && '60px',
-                                                                    }
-                                                                }
+                                                                style={this.makeStyle(size.name, item.value, item.selected)}
                                                                 className={`product__size ${item.selected ? 'size' : ''}`}
                                                                 onClick={() => this.setSize(size.name, item.value, product)}
                                                             >
