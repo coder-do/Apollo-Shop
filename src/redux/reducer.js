@@ -3,22 +3,46 @@ export const initialState = {
     currency: '$'
 }
 
+function checkParams(prevSizes, currentSizes) {
+    let add = false;
+    if (prevSizes.length === currentSizes.length) {
+        prevSizes.map((size, index) => size.items.map((item, itemInd) => {
+            if (item.value === currentSizes[index].items[itemInd].value) { // e.g XL === XL
+                if (item.selected !== currentSizes[index].items[itemInd].selected) {
+                    add = true;
+                }
+            } else {
+                add = true;
+            }
+            return item;
+        }))
+    }
+    else {
+        add = true;
+    }
+    return add;
+}
+
 export const reducer = (state = initialState, action) => {
     switch (action.type) {
         case 'ADD_PRODUCT':
             let newProd;
-            let exist = state.products.filter(el => el.id === action.payload.product.id);
-            if (exist.length > 0) {
-                newProd = state.products.map(prod => {
-                    if (prod.id === exist[0].id) {
-                        prod.qtty++;
-                    }
-                    return prod;
-                })
-            } if (exist.length === 0) {
-                newProd = [...state.products, action.payload.product];
-            }
+            const { product } = action.payload;
+            let exist = state.products.filter(el => !checkParams(el.sizes, product.sizes));
 
+            let add = true;
+            state.products.map(prod => {
+                if (!checkParams(product.sizes, prod.sizes)) {
+                    prod.qtty += 1;
+                    add = false;
+                }
+                return prod;
+            })
+            add ? newProd = [...state.products, product] : newProd = [...state.products];
+
+            if (exist.length === 0) {
+                newProd = [...state.products, product];
+            }
             return {
                 ...state,
                 products: newProd
@@ -27,10 +51,10 @@ export const reducer = (state = initialState, action) => {
             let newProduct;
             if (action.payload.product.qtty - 1 === 0) {
                 if (window.confirm('Are you sure to remove cart item?')) {
-                    newProduct = state.products.filter(prod => prod.id !== action.payload.product.id);
+                    newProduct = state.products.filter(prod => checkParams(prod.sizes, action.payload.product.sizes));
                 } else {
                     newProduct = state.products.map(prod => {
-                        if (prod.id === action.payload.product.id) {
+                        if (!checkParams(prod.sizes, action.payload.product.sizes)) {
                             prod.qtty = 1;
                         }
                         return prod;
@@ -39,7 +63,7 @@ export const reducer = (state = initialState, action) => {
             }
             if (action.payload.product.qtty > 1) {
                 newProduct = state.products.map(prod => {
-                    if (prod.id === action.payload.product.id) {
+                    if (!checkParams(prod.sizes, action.payload.product.sizes)) {
                         prod.qtty--;
                     }
                     return prod;
@@ -57,4 +81,4 @@ export const reducer = (state = initialState, action) => {
         default:
             return state;
     }
-}
+};

@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import image from '../../assets/cart.svg';
+import Select from './Select';
 
 export default class CurrencyBlock extends Component {
     constructor(props) {
         super(props);
         this.state = {
             selectedValue: '$'
-        }
+        };
     }
 
     shouldComponentUpdate(props, nextState) {
@@ -20,20 +21,11 @@ export default class CurrencyBlock extends Component {
         return (
             <div className='currency'>
                 <div className='currency__block'>
-                    <select defaultValue={' '} onChange={(e) => changeCurrency(e.target.value)}>
-                        <option value='$'>$ USD</option>
-                        <option value='£'>£ EUR</option>
-                        <option value='¥'>¥ JPY</option>
-                        <option value='₽'>₽ RUB</option>
-                        <option value='A$'>A$ AUD</option>
-                    </select>
+                    <Select changeCurrency={changeCurrency} />
                 </div>
-                <div onClick={this.props.show} style={{
-                    cursor: 'pointer'
-                }}>
+                <div className='currency__numbers' onClick={this.props.show}>
                     <span className='number'>{items}</span>
                     <img
-
                         src={image}
                         alt='cart'
                     />

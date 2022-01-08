@@ -91,19 +91,38 @@ export default class CartElement extends Component {
         }
     }
 
+    getFinalProduct(product, sizes) {
+        const finalProduct = JSON.parse(JSON.stringify(product));
+
+        if (!product.hasOwnProperty('sizes')) {
+            finalProduct.sizes = sizes;
+        }
+
+        return finalProduct;
+    }
+
+    makeStyle(name, small, selected, value) {
+        return {
+            backgroundColor: name === 'Color' && value,
+            transform: name === 'Color' && selected && "scale(0.8)",
+            width: name === 'Capacity' && !small && '60px',
+            width: name === 'Capacity' && small && '50px'
+        }
+    }
+
+    filterPrice(product, currency) {
+        return product.prices.filter(el => el.currency.symbol === currency);
+    }
+
     render() {
         const {
             currentImageIndex, sizes,
             currentImage, images, qtty
         } = this.state;
         const { small, product, currency, onAdd, onRemove } = this.props;
-        const price = product && product.prices.filter(el => el.currency.symbol === currency);
+        const price = product && this.filterPrice(product, currency);
 
-        const finalProduct = JSON.parse(JSON.stringify(product));
-
-        if (!product.hasOwnProperty('sizes')) {
-            finalProduct.sizes = sizes;
-        }
+        const finalProduct = this.getFinalProduct(product, sizes)
 
         return (
             <>
@@ -114,7 +133,7 @@ export default class CartElement extends Component {
                         <p className='cart__subheader'>{product.brand}</p>
                         <p className='cart__price'><b>{price[0].amount} {price[0].currency.symbol}</b></p>
                         <div >
-                            {sizes.length === 0 && <p style={{ fontSize: '15px', color: 'red' }}>Without attributes</p>}
+                            {sizes.length === 0 && <p className='without'>Without attributes</p>}
                             {
                                 sizes.length > 0 &&
                                 sizes.map(attribute => {
@@ -125,14 +144,8 @@ export default class CartElement extends Component {
                                                 {attribute.items.map(item => (
                                                     <div
                                                         key={item.value}
-                                                        style={
-                                                            {
-                                                                backgroundColor: attribute.name === 'Color' && item.value,
-                                                                transform: attribute.name === 'Color' && item.selected && "scale(0.9)",
-                                                                width: attribute.name === 'Capacity' && !small && '60px',
-                                                                width: attribute.name === 'Capacity' && small && '50px'
-                                                            }
-                                                        }
+                                                        /*eslint no-dupe-keys: 0*/
+                                                        style={this.makeStyle(attribute.name, small, item.selected, item.value)}
                                                         className={`product__size ${item.selected ? 'size' : ''}`}
                                                         onClick={() => this.setSize(attribute.name, item.value, sizes)}
                                                     >
@@ -184,7 +197,7 @@ export default class CartElement extends Component {
                             <img
                                 className='item__image'
                                 src={currentImage.toString()}
-                                alt='cart item image'
+                                alt='cart item img'
                             />
                         </div>
                     </div>

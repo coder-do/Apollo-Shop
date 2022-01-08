@@ -5,6 +5,7 @@
 /.pnp
 .pnp.js
 reducer1.js
+fixes.md
 # testing
 /coverage
 

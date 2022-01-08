@@ -5,15 +5,11 @@ import CartElement from '../components/Cart/CartElement';
 import { addProduct, removeProduct } from '../redux/actions';
 
 class CartPage extends Component {
-    constructor(props) {
-        super(props)
-    }
-
     render() {
         const { products, currency, onAdd, onRemove } = this.props;
         return (
             <Cart>
-                {products.length === 0 && <p style={{ marginTop: '50px' }}>Cart is empty</p>}
+                {products.length === 0 && <p className='emptyCart'>Cart is empty</p>}
                 {products.length > 0 && products.map(product => {
                     return (
                         <CartElement

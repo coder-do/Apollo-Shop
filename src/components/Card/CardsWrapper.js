@@ -1,24 +1,23 @@
 import React, { Component } from 'react';
 
 export default class CardsWrapper extends Component {
-    constructor(props) {
-        super(props)
-    }
-
-    render() {
+    setPosition(position) {
         let justifyContent = 'unset';
 
-        if (this.props.around) {
+        if (position === 'around') {
             justifyContent = 'space-around'
-        } if (this.props.between) {
+        } if (position === 'between') {
             justifyContent = 'space-between';
         }
 
+        return justifyContent;
+    }
+
+    render() {
+        const justifyContent = this.setPosition(this.props.position);
+
         return (
-            <div style={{
-                display: 'flex', flexWrap: 'wrap',
-                justifyContent: justifyContent,
-            }}>
+            <div className='cardwrapper' style={{ justifyContent: justifyContent }}>
                 {this.props.children}
             </div>
         )

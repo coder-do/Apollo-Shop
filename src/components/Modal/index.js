@@ -8,12 +8,13 @@ import "./style.sass";
 class Modal extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            totalCount: 0
+        }
     }
 
-    render() {
+    checkout(products, currency) {
         let totalPrice = 0;
-        const { onClose, show, products, currency, onAdd, onRemove } = this.props;
-
         let checkout_obj = [];
         if (products.length > 0) {
             products.map(el => {
@@ -21,6 +22,7 @@ class Modal extends Component {
                     if (currency === price.currency.symbol) {
                         totalPrice += price.amount * el.qtty;
                     }
+                    return price
                 })
                 const { name, brand, qtty, sizes } = el;
                 checkout_obj = [
@@ -29,11 +31,28 @@ class Modal extends Component {
                         name, brand, qtty, sizes
                     }
                 ]
+                return el;
             })
             totalPrice = totalPrice.toFixed(2);
             checkout_obj.push({ totalPrice, currency: this.props.currency })
         };
+        return {
+            checkout_obj,
+            totalPrice
+        }
+    };
 
+    productsCount(products) {
+        let count = 0;
+        products.map(product => count += product.qtty);
+        return count;
+    }
+
+
+    render() {
+        const { onClose, show, products, currency, onAdd, onRemove } = this.props;
+        const { checkout_obj, totalPrice } = this.checkout(products, currency);
+        const totalCount = this.productsCount(products);
 
         return (
             <div className="overlay" onClick={onClose} style={{ display: show ? "block" : "none" }}>
@@ -41,7 +60,7 @@ class Modal extends Component {
                     <div className="modal-content" onClick={e => e.stopPropagation()}>
                         <div className="modal-header">
                             <h4 className="modal-title">My Bag</h4>
-                            <span>, {products.length} item{products.length > 1 && 's'}</span>
+                            <span>, {totalCount} item{totalCount > 1 && 's'}</span>
                         </div>
                         <div className="modal-body">
                             {products && products.map(product => {
@@ -80,7 +99,7 @@ class Modal extends Component {
                 </div>
             </div>
         );
-    }
+    };
 };
 
 const mapStateToProps = state => {
@@ -88,13 +107,13 @@ const mapStateToProps = state => {
         products: state.products,
         currency: state.currency
     }
-}
+};
 
 const mapDispatchToProps = dispatch => {
     return {
         onAdd: (product) => dispatch(addProduct(product)),
         onRemove: (product) => dispatch(removeProduct(product))
     }
-}
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Modal);
