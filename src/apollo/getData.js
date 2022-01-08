@@ -13,7 +13,9 @@ export const getData = async () => {
                 el.attributes.map(attribute => {
                     attribute.items.map(item => {
                         item.selected = false;
+                        return item;
                     })
+                    return attribute;
                 })
                 el.sizes = el.attributes;
                 return el;

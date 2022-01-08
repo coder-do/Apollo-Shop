@@ -125,6 +125,7 @@ export default class CartElement extends Component {
                                                 {attribute.items.map(item => (
                                                     <div
                                                         key={item.value}
+                                                        /*eslint no-dupe-keys: 0*/
                                                         style={
                                                             {
                                                                 backgroundColor: attribute.name === 'Color' && item.value,
@@ -184,7 +185,7 @@ export default class CartElement extends Component {
                             <img
                                 className='item__image'
                                 src={currentImage.toString()}
-                                alt='cart item image'
+                                alt='cart item img'
                             />
                         </div>
                     </div>

@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 
 export default class CardsWrapper extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     setPosition(position) {
         let justifyContent = 'unset';
 

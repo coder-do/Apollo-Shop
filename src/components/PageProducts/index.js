@@ -5,10 +5,6 @@ import CardsWrapper from '../Card/CardsWrapper';
 import Card from '../Card';
 
 export default class PageProducts extends Component {
-    constructor(props) {
-        super(props)
-    };
-
     render() {
         const { addProd, currency, products, position, title } = this.props;
         return (

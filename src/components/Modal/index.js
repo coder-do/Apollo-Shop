@@ -22,6 +22,7 @@ class Modal extends Component {
                     if (currency === price.currency.symbol) {
                         totalPrice += price.amount * el.qtty;
                     }
+                    return price
                 })
                 const { name, brand, qtty, sizes } = el;
                 checkout_obj = [
@@ -30,6 +31,7 @@ class Modal extends Component {
                         name, brand, qtty, sizes
                     }
                 ]
+                return el;
             })
             totalPrice = totalPrice.toFixed(2);
             checkout_obj.push({ totalPrice, currency: this.props.currency })

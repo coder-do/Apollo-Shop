@@ -5,10 +5,6 @@ import CartElement from '../components/Cart/CartElement';
 import { addProduct, removeProduct } from '../redux/actions';
 
 class CartPage extends Component {
-    constructor(props) {
-        super(props)
-    }
-
     render() {
         const { products, currency, onAdd, onRemove } = this.props;
         return (

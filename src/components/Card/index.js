@@ -4,9 +4,6 @@ import image from '../../assets/add.png';
 import './style.sass';
 
 export default class Card extends Component {
-    constructor(props) {
-        super(props);
-    }
     render() {
         const {
             isOutOfStock, title, price, currency,
@@ -22,7 +19,7 @@ export default class Card extends Component {
                         <img
                             className='card__image'
                             src={mainImage}
-                            alt='Card Image'
+                            alt='Card img'
                         />
                         {isOutOfStock && <p className='out'>OUT OF STOCK</p>}
                     </div>

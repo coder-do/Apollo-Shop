@@ -7,11 +7,17 @@ function checkParams(prevSizes, currentSizes) {
     let add = false;
     if (prevSizes.length === currentSizes.length) {
         prevSizes.map((size, index) => size.items.map((item, itemInd) => {
-            if (item && item.selected !== currentSizes[index].items[itemInd].selected) {
+            if (item.value === currentSizes[index].items[itemInd].value) { // e.g XL === XL
+                if (item.selected !== currentSizes[index].items[itemInd].selected) {
+                    add = true;
+                }
+            } else {
                 add = true;
             }
+            return item;
         }))
-    } else {
+    }
+    else {
         add = true;
     }
     return add;
@@ -24,16 +30,15 @@ export const reducer = (state = initialState, action) => {
             const { product } = action.payload;
             let exist = state.products.filter(el => !checkParams(el.sizes, product.sizes));
 
-            let add = false;
-            if (exist.length > 0) {
-                state.products.map(prod => {
-                    if (!checkParams(product.sizes, prod.sizes)) {
-                        prod.qtty += 1;
-                        add = false;
-                    }
-                })
-                add ? newProd = [...state.products, product] : newProd = [...state.products];
-            }
+            let add = true;
+            state.products.map(prod => {
+                if (!checkParams(product.sizes, prod.sizes)) {
+                    prod.qtty += 1;
+                    add = false;
+                }
+                return prod;
+            })
+            add ? newProd = [...state.products, product] : newProd = [...state.products];
 
             if (exist.length === 0) {
                 newProd = [...state.products, product];

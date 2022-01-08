@@ -14,7 +14,7 @@ export default class ProductDetail extends Component {
 
     componentDidUpdate(prevProps) {
         if (Object.keys(prevProps.product).length !== 0
-            && this.state.isDisabled == true) {
+            && this.state.isDisabled === true) {
             this.checkAttributes();
         }
         if (this.state.currentImage === '') {
@@ -100,14 +100,14 @@ export default class ProductDetail extends Component {
                                         ...prev,
                                         currentImage: image
                                     }))}
-                                    alt='Product image'
+                                    alt='Product img'
                                 />
                             ))}
                         </div>
                         <div className='product__images-big'>
                             <img
                                 src={currentImage}
-                                alt='Product image'
+                                alt='Product img'
                             />
                         </div>
                         <div className='product__block'>
