@@ -33,11 +33,18 @@ class App extends Component {
         document.body.style.overflow = 'visible'
     }
 
+    productsCount(products) {
+        let count = 0;
+        products.map(product => count += product.qtty);
+        return count;
+    }
+
     render() {
-        const { items, changeCurrency, products, currency } = this.props;
+        const { changeCurrency, products, currency } = this.props;
+        const totalCount = this.productsCount(products);
         return (
             <Container>
-                <Header show={this.show} items={items} changeCurrency={changeCurrency} />
+                <Header show={this.show} items={totalCount} changeCurrency={changeCurrency} />
                 <div className='wrapper'>
                     <Modal
                         products={products}
@@ -68,7 +75,6 @@ class App extends Component {
 
 const mapStateToProps = state => {
     return {
-        items: state.products.length,
         products: state.products,
         currency: state.currency
     }
